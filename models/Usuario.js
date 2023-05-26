@@ -18,6 +18,11 @@ const usuarioSchema = mongoose.Schema ({
         trim: true,
         unique: true
     },
+    rol: {
+        type: String,
+        default: 'user',
+        trim: true,
+    },
     token: {
         type: String,
     },

@@ -1,10 +1,12 @@
 import Usuario from "../models/Usuario.js";
 import generarId from "../helpers/generarId.js";
 import generarJWT from "../helpers/generarJWT.js";
+import { transporter } from "../helpers/data.js";
+import { verifyEmailWithZeroBounce } from "../helpers/data.js";
 
 const registrar = async (req, res) => {
-    const { email } = req.body;
-    const existeUsuario = await Usuario.findOne({email});
+    const { email, nombre } = req.body;
+    const existeUsuario = await Usuario.findOne({ email });
 
     if (existeUsuario) {
         const error = new Error("Usuario ya registrado");
@@ -12,10 +14,34 @@ const registrar = async (req, res) => {
     }
 
     try {
+        // COMENTADO POR PLATA :´VV
+        // const verificacionEmail = await verifyEmailWithZeroBounce(email);
+        // if (verificacionEmail != null) {
+        //     return res.json({ msg: verificacionEmail });
+        // }
         const usuario = new Usuario(req.body);
         usuario.token = generarId();
-        const usuarioAlmacenado = await usuario.save();
-        res.json(usuarioAlmacenado);
+        await usuario.save();
+        const confirmUrl = `https://3ca0-2800-484-9f86-4eec-b4dd-812a-b01b-3b27.ngrok-free.app/api/usuarios/confirmar/${usuario.token}`;
+        const mailOptions = {
+            from: process.env.EMAIL_ALQUILES,
+            to: email,
+            subject: 'Confirmación de cuenta',
+            html: `<p>Hola ${nombre}!</p>
+                   <p>Por favor, haz clic en el siguiente botón para confirmar tu cuenta:</p>
+                   <a href="${confirmUrl}" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px;">Confirmar cuenta</a>`
+        };
+
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.log('Error al enviar el correo de confirmación:', error);
+                res.status(500).json({ msg: 'Error al enviar el correo de confirmación' });
+            } else {
+                console.log('Correo de confirmación enviado:', info.response);
+                res.json({ msg: 'Correo de confirmación enviado' });
+            }
+        });
+        res.json({"msg": `Se ha enviado un correo a ${email} para confirmar`});
     } catch (error) {
         console.error(error);
     }
@@ -23,7 +49,7 @@ const registrar = async (req, res) => {
 
 const autenticar = async (req, res) => {
     const { email, password } = req.body;
-    
+
     // comprobar user existe
     const usuario = await Usuario.findOne({ email });
     if (!usuario) {
@@ -62,7 +88,7 @@ const confirmar = async (req, res) => {
         usuarioConfirmar.confirmado = true;
         usuarioConfirmar.token = "";
         await usuarioConfirmar.save();
-        res.json({ "msg": "Usuario confirmado correctamente" });
+        res.send("<h1>USUARIO CONFIRMADO CORRECTAMENTE</h1>");
     } catch (error) {
         console.error(error);
     }
@@ -75,7 +101,7 @@ const olvidePassword = async (req, res) => {
         const error = new Error("El usuario no existe");
         return res.status(404).json({ "msg": error.message });
     }
-    
+
     try {
         usuario.token = generarId();
         await usuario.save();
