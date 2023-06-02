@@ -47,7 +47,7 @@ const borrarProducto = async (req, res) => {
         return res.status(404).json({ "msg": error.message });
     }
     try {
-        await reserva.deleteOne();
+        await producto.deleteOne();
         return res.json({ "msg": "Producto eliminado" });
     } catch (error) {
         return res.json({ "msg": error });
