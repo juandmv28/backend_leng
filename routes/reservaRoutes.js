@@ -15,7 +15,7 @@ const router = express.Router();
 router
     .route("/")
     .post(verificarDisponibilidad, crearReserva)
-    .get(checkAuth, obtenerReservas);
+    .get(obtenerReservas);
 
 router
     .route("/:id")
