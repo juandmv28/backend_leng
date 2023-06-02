@@ -14,7 +14,7 @@ const router = express.Router();
 
 router
     .route("/")
-    .post(checkAuth, verificarDisponibilidad, crearReserva)
+    .post(verificarDisponibilidad, crearReserva)
     .get(checkAuth, obtenerReservas);
 
 router
