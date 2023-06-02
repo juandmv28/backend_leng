@@ -8,7 +8,7 @@ const inventarioSchema = mongoose.Schema ({
     },
     descripcion: {
         type: String,
-        required: true,
+        required: false,
         trim: true,
     },
     servicio: {
