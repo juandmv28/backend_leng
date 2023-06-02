@@ -2,6 +2,7 @@ import Usuario from "../models/Usuario.js";
 import generarId from "../helpers/generarId.js";
 import generarJWT from "../helpers/generarJWT.js";
 import { transporter } from "../helpers/data.js";
+import path from "path";
 import { verifyEmailWithZeroBounce } from "../helpers/data.js";
 
 const registrar = async (req, res) => {
@@ -93,7 +94,8 @@ const confirmar = async (req, res) => {
         usuarioConfirmar.confirmado = true;
         usuarioConfirmar.token = "";
         await usuarioConfirmar.save();
-        res.send("<h1>USUARIO CONFIRMADO CORRECTAMENTE</h1>");
+        const path = path.join(__dirname, 'templates\confirmacion.html');
+        res.sendFile(path);
     } catch (error) {
         console.error(error);
     }
