@@ -24,7 +24,7 @@ const registrar = async (req, res) => {
         const usuario = new Usuario(req.body);
         usuario.token = generarId();
         await usuario.save();
-        const confirmUrl = `http://localhost:3000/api/usuarios/confirmar/${usuario.token}`;
+        const confirmUrl = `http://ec2-3-82-214-192.compute-1.amazonaws.com:3000/api/usuarios/confirmar/${usuario.token}`;
         
         const mailOptions = {
             from: process.env.EMAIL_ALQUILES,
