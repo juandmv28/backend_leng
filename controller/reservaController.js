@@ -1,10 +1,17 @@
 import Reserva from "../models/Reserva.js";
+import Usuario from "../models/Usuario.js";
 
 const obtenerReservas = async (req, res) => {
-    const reservas = await Reserva.find();
-
-    res.json(reservas);
-};
+    try {
+      const reservas = await Reserva.find().populate('creador');
+  
+      res.json(reservas);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ mensaje: 'Error al obtener las reservas' });
+    }
+  };
+  
 
 const obtenerReserva = async (req, res) => {
     const { id } = req.params;
@@ -14,7 +21,10 @@ const obtenerReserva = async (req, res) => {
 }
 
 const crearReserva = async (req, res) => {
+    const { id_usuario } = req.headers; 
+    console.log('AAAAAAAAAAAAAAAA', id_usuario);
     const reserva = new Reserva(req.body);
+    reserva.creador = await Usuario.findById(id_usuario);
     try {
         const reservaAlmacenada = await reserva.save();
         return res.json(reservaAlmacenada);
