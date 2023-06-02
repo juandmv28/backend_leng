@@ -6,18 +6,18 @@ import {
     obtenerProducto,
     editarProducto
 } from "../controller/inventarioController.js";
-import checkInventory from "../middleware/checkinventory.js";
+// import checkInventory from "../middleware/checkinventory.js";
 
 const router = express.Router();
 
 router
     .route('/:id')
-    .get(checkInventory, obtenerProducto)
-    .delete(checkInventory, borrarProducto)
-    .put(checkInventory, editarProducto);
+    .get(obtenerProducto)
+    .delete(borrarProducto)
+    .put( editarProducto);
 router
-    .get('/:servicio', checkInventory, obtenerInventarioPorServicio);
+    .get('/servicios/:servicio', obtenerInventarioPorServicio);
 router
-    .post("/", checkInventory, crearProducto);    
+    .post("/",crearProducto);    
 
 export default router;

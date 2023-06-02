@@ -9,6 +9,12 @@ import cors from "cors";
 
 
 const app = express();
+app.use(cors({
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
+}));
 
 app.use(express.json());
 app.use(morgan('dev'));
@@ -16,8 +22,6 @@ app.use(morgan('dev'));
 dotenv.config();
 
 conectarDB();
-
-app.use(cors());
 
 // Routing
 app.use('/api/usuarios', usuarioRoutes);

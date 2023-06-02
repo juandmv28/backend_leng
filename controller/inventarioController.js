@@ -3,7 +3,8 @@ import Inventario from "../models/Inventario.js"
 const obtenerInventarioPorServicio = async (req, res) => {
     const { servicio } = req.params;
     try {
-        const inventario = await Inventario.find({ servicio });
+        const inventario = await Inventario.find({ servicio: servicio });
+        console.log(inventario);
         res.json(inventario);
     } catch (error) {
         console.log(error);

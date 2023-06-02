@@ -6,7 +6,9 @@ import { verifyEmailWithZeroBounce } from "../helpers/data.js";
 
 const registrar = async (req, res) => {
     const { email, nombre } = req.body;
+    console.log(email, "XD");
     const existeUsuario = await Usuario.findOne({ email });
+    console.log(existeUsuario);
 
     if (existeUsuario) {
         const error = new Error("Usuario ya registrado");
@@ -22,7 +24,8 @@ const registrar = async (req, res) => {
         const usuario = new Usuario(req.body);
         usuario.token = generarId();
         await usuario.save();
-        const confirmUrl = `https://3ca0-2800-484-9f86-4eec-b4dd-812a-b01b-3b27.ngrok-free.app/api/usuarios/confirmar/${usuario.token}`;
+        const confirmUrl = `http://localhost:3000/api/usuarios/confirmar/${usuario.token}`;
+        
         const mailOptions = {
             from: process.env.EMAIL_ALQUILES,
             to: email,
@@ -60,7 +63,7 @@ const autenticar = async (req, res) => {
     // comprobar si está confirmado
     if (!usuario.confirmado) {
         const error = new Error("Tu cuenta no ha sido confirmada");
-        return res.status(403).json({ "msg": error.message });
+        return res.status(405).json({ "msg": error.message });
     }
 
     // comprobar password
@@ -69,7 +72,9 @@ const autenticar = async (req, res) => {
             _id: usuario._id,
             nombre: usuario.nombre,
             email: usuario.email,
+            rol: usuario.rol,
             token: generarJWT(usuario._id),
+            statusCode: 200,
         });
     } else {
         const error = new Error("El password es incorrecto");
