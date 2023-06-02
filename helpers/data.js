@@ -6,9 +6,9 @@ const Servicios = ["Billar", "Tejo", "Sintetica"];
 // not a good practice, but enough for this project
 // PRECIO POR HORA
 const precioServicios = {
-    Billar: 20000,
-    Tejo: 15000,
-    Sintetica: 50000,
+    billar: 20000,
+    tejo: 15000,
+    futbol: 50000,
 }
 
 const transporter = nodemailer.createTransport({
