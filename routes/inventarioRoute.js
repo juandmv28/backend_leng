@@ -4,12 +4,14 @@ import {
     crearProducto,
     borrarProducto,
     obtenerProducto,
-    editarProducto
+    editarProducto,
+    obtenerProductos
 } from "../controller/inventarioController.js";
 // import checkInventory from "../middleware/checkinventory.js";
 
 const router = express.Router();
 
+router.get("/", obtenerProductos);
 router
     .route('/:id')
     .get(obtenerProducto)

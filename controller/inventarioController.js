@@ -11,6 +11,11 @@ const obtenerInventarioPorServicio = async (req, res) => {
     }
 }
 
+const obtenerProductos = async (req, res) => {
+    const productos = await Inventario.find();
+    res.json(productos);
+}
+
 const obtenerProducto = async (req, res) => {
     console.log('SÍ ENTRAAAAAAAAAAAA');
     const { id } = req.params;
@@ -76,5 +81,6 @@ export {
     crearProducto,
     borrarProducto,
     obtenerProducto,
-    editarProducto
+    editarProducto,
+    obtenerProductos
 }
