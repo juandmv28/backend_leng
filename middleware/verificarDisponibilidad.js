@@ -6,6 +6,11 @@ const validarReserva = async (req, res, next) => {
     let { servicio, fecha, horaEntrada, duracion } = req.body;
     const { id } = req.params;
 
+    console.log('horaEntrada', horaEntrada);
+    console.log('fecha entrada', fecha);
+    console.log('servicio', servicio);
+    console.log('duracion', duracion);
+
     if (!servicio) {
         const query = await Reserva.findById(id);
         if (!query) {
