@@ -12,9 +12,9 @@ import verificarDisponibilidad from "../middleware/verificarDisponibilidad.js";
 
 const router = express.Router();
 
+router.post("/crear-reseva", verificarDisponibilidad, crearReserva);
 router
     .route("/")
-    .post(verificarDisponibilidad, crearReserva)
     .get(obtenerReservas);
 
 router
