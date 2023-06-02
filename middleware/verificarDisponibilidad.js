@@ -6,11 +6,6 @@ const validarReserva = async (req, res, next) => {
     let { servicio, fecha, horaEntrada, duracion } = req.body;
     const { id } = req.params;
 
-    console.log('horaEntrada', horaEntrada);
-    console.log('fecha entrada', fecha);
-    console.log('servicio', servicio);
-    console.log('duracion', duracion);
-
     if (!servicio) {
         const query = await Reserva.findById(id);
         if (!query) {
@@ -51,14 +46,14 @@ const validarReserva = async (req, res, next) => {
 
     reservas.forEach((reserva) => {
         const fechaFormat = moment(reserva.fecha).format("DD/MM/YYYY");
-        const fechaHora = moment(`${fechaFormat} ${reserva.horaEntrada}`, "DD/MM/YYYY hh:mm A");
+        const fechaHora = moment(`${fechaFormat} ${reserva.horaEntrada}`, "DD/MM/YYYY HH:mm");
         const fechaHoraFin = moment(fechaHora).add(reserva.duracion, "hours");
 
         fechaHoraReservas.push({ fechaHora, fechaHoraFin });
     });
 
     // Comparar las fechas y horas de la nueva reserva con las reservas existentes para determinar si hay una superposición.
-    const fechaHoraNuevaReserva = moment(`${fecha} ${horaEntrada}`, "DD/MM/YYYY hh:mm a");
+    const fechaHoraNuevaReserva = moment(`${fecha} ${horaEntrada}`, "DD/MM/YYYY HH:mm");
     const fechaHoraFinNuevaReserva = moment(fechaHoraNuevaReserva).add(duracion, "hours");
 
     for (let i = 0; i < fechaHoraReservas.length; i++) {
@@ -79,4 +74,3 @@ const validarReserva = async (req, res, next) => {
 };
 
 export default validarReserva;
-
